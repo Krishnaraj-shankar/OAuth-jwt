@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <a href="/auth/google">Authenticate with Google</a> -->
+    <button onclick="ajax()">Authenticate with Google</button>
+    <script>
+        function ajax(){
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '/home', true);
+            debugger;
+            let token = localStorage.getItem('oauth');
+            console.log("token ",token);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            token ? xhr.setRequestHeader('Authorization', `Bearer ${token}`) : null;
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    localStorage.setItem('oauth',response.accessTokenJWT);
+                    debugger;
+                    console.log(response);
+                    } else {
+                    console.error('Error:', xhr.statusText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
